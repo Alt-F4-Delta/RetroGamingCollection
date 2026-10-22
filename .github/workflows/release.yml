@@ -31,7 +31,24 @@ jobs:
       - name: Build installer and portable package
         id: package
         run: ./tools/build-release.ps1 -Counter (99 + [int]$env:GITHUB_RUN_NUMBER)
+      - name: Verify installer upgrade preserves data
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_VERSION: ${{ steps.package.outputs.version }}
+          RELEASE_DIR: ${{ steps.package.outputs.release-dir }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $previous = gh release list --limit 100 --json tagName,isDraft,isPrerelease | ConvertFrom-Json | Where-Object { !$_.isDraft -and !$_.isPrerelease } | Select-Object -First 1
+          if (!$previous) { Write-Host 'No previous installer is available for an upgrade test.'; exit 0 }
+          $baseline = Join-Path $env:RUNNER_TEMP 'previous-installer'
+          New-Item -ItemType Directory -Force -Path $baseline | Out-Null
+          gh release download $previous.tagName --pattern '*Setup-*-win-x64.exe' --dir $baseline
+          if ($LASTEXITCODE -ne 0) { throw 'Could not obtain previous installer for validation.' }
+          $old = (Get-ChildItem -LiteralPath $baseline -Filter '*.exe' | Select-Object -First 1).FullName
+          $new = Join-Path $env:RELEASE_DIR "RetroGamingCollection-Setup-$env:RELEASE_VERSION-win-x64.exe"
+          ./tools/test-installer.ps1 -OldInstaller $old -NewInstaller $new -ExpectedVersion $env:RELEASE_VERSION -SkipAppBoot
       - name: Publish complete release with changelog
+        # Only validated installers are published.
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_VERSION: ${{ steps.package.outputs.version }}

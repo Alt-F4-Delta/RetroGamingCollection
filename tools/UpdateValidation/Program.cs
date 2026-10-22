@@ -7,6 +7,19 @@ using RetroGamingCollection;
 var root=Path.Combine(Path.GetTempPath(),"RetroGaming-UpdateValidation",Guid.NewGuid().ToString("N"));
 Directory.CreateDirectory(root);
 Environment.SetEnvironmentVariable("RETROGAMING_DATA_DIRECTORY",root);
+if (args.Contains("--live"))
+{
+    var liveService=new UpdateService();
+    var liveUpdate=await liveService.CheckAsync(new ReleaseVersion(99));
+    if (liveUpdate is null) throw new Exception("No complete published release is available for live verification.");
+    var downloaded=await liveService.DownloadAsync(liveUpdate);
+    Console.WriteLine($"PASS: Live GitHub v{liveUpdate.Version.Display} update download and checksum verification ({new FileInfo(downloaded).Length:N0} bytes).");
+    Console.WriteLine($"Changelog received: {liveUpdate.Notes.Length:N0} characters. Verified installer: {downloaded}");
+    var currentUpdate=await liveService.CheckAsync(liveUpdate.Version);
+    if (currentUpdate is not null) throw new Exception("Current release incorrectly offered itself as an update.");
+    Console.WriteLine("PASS: Current published release reports up to date.");
+    return;
+}
 var passed=0;
 void Check(bool condition,string label) { if (!condition) throw new Exception(label); Console.WriteLine("PASS: "+label); passed++; }
 Check(ReleaseVersion.TryParse("v1.09",out var nine) && ReleaseVersion.TryParse("1.10",out var ten) && ten.Counter==nine.Counter+1,"Exact hundredth version increment and comparison");

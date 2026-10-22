@@ -57,4 +57,6 @@ The release script obtains the unpacked Inno Setup 6.7.3 compiler package and ve
 
 The synthetic validation suite checks version ordering/rollover, release selection, cumulative notes, checksum and size enforcement, cancellation, untrusted URLs, network failure, filters and migration preservation. Optional `tools/Validation` integration checks require a local library; they are not run by CI. Set `RETROGAMING_DATA_DIRECTORY` only when deliberately isolating test data.
 
+After publishing a release, `dotnet run --project tools/UpdateValidation/UpdateValidation.csproj -c Release -- --live` verifies the real public GitHub feed, changelog, installer download and checksums without running the downloaded installer. `tools/test-installer.ps1` tests two installer versions in an isolated `artifacts/install-smoke` directory, checks preservation, and uninstalls that test copy. It refuses to replace an existing installation elsewhere. CI runs that upgrade check using the previous published installer; local runs also verify the installed app opens with the expected version.
+
 Local ROMs, emulators, BIOS files, saves, personal settings, collection reports, recovery helpers and build outputs are excluded from Git and release packages. Package contents are limited to the compiled application/runtime plus this README and changelog.
