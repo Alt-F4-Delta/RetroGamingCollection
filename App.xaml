@@ -1,0 +1,6 @@
+<Application x:Class="RetroGamingCollection.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Application.Resources>
+    <Style TargetType="TextBlock"><Setter Property="FontFamily" Value="Consolas"/><Setter Property="Foreground" Value="#D7D7FF"/></Style>
+    <Style TargetType="Button"><Setter Property="Background" Value="#29216E"/><Setter Property="Foreground" Value="#FFFFFF"/><Setter Property="BorderBrush" Value="#7067D8"/><Setter Property="Padding" Value="10,6"/><Setter Property="Margin" Value="3"/></Style>
+  </Application.Resources>
+</Application>

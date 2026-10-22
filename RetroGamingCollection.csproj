@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>RetroGaming</AssemblyName>
+    <RootNamespace>RetroGamingCollection</RootNamespace>
+    <Platforms>x64</Platforms>
+    <Version>1.0.0</Version>
+    <InformationalVersion>1.00</InformationalVersion>
+    <Product>RetroGaming Collection</Product>
+    <Company>Alt-F4-Delta</Company>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="tools/**/*.cs" />
+    <Compile Remove="Playable/**/*.cs" />
+    <Compile Remove="artifacts/**/*.cs" />
+  </ItemGroup>
+</Project>

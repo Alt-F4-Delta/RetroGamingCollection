@@ -1,0 +1,40 @@
+<Window x:Class="RetroGamingCollection.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="RetroGaming Collection" Width="1100" Height="700" MinWidth="760" MinHeight="500" Background="#090821" Foreground="#D7D7FF" WindowStartupLocation="CenterScreen">
+  <Grid Margin="18">
+    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+    <DockPanel Grid.Row="0" Margin="0,0,0,14">
+      <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+        <Button Content="IMPORT FOLDER" Click="ImportFolder_Click"/>
+        <Button Content="RESCAN" Click="Rescan_Click"/>
+        <Button Content="SETTINGS" Click="Settings_Click"/>
+        <Button x:Name="CheckUpdatesButton" Content="CHECK FOR UPDATES" Click="CheckUpdates_Click"/>
+      </StackPanel>
+      <StackPanel>
+        <TextBlock Text="ZSNES COLLECTION" FontSize="28" FontWeight="Bold" Foreground="#AFA8FF"/>
+        <TextBlock Text="A portable library for legally obtained game files" Foreground="#7772B8"/>
+      </StackPanel>
+    </DockPanel>
+    <Grid Grid.Row="1">
+      <Grid.ColumnDefinitions><ColumnDefinition Width="310"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+      <Border Grid.Column="0" Background="#121039" BorderBrush="#39328C" BorderThickness="1" Padding="12" Margin="0,0,14,0">
+        <DockPanel>
+          <TextBox x:Name="SearchBox" DockPanel.Dock="Top" Height="32" Margin="0,0,0,10" Padding="8" Background="#070719" Foreground="White" BorderBrush="#554CCC" TextChanged="SearchBox_TextChanged" KeyDown="GameList_KeyDown" ToolTip="Search title, region or platform; Enter launches the selection"/>
+          <StackPanel DockPanel.Dock="Top" Margin="0,0,0,10">
+            <TextBlock Text="LANGUAGE" FontSize="11" Foreground="#AFA8FF" Margin="0,0,0,4"/>
+            <ComboBox x:Name="LanguageFilterBox" Height="28" DisplayMemberPath="Label" SelectedValuePath="Code" SelectionChanged="Filters_Changed" Foreground="#090821" ToolTip="Language tags in filenames only; untagged does not guarantee English"/>
+            <CheckBox x:Name="UsaOnlyBox" Content="USA only" IsChecked="True" Foreground="#D7D7FF" Margin="0,8,0,0" Checked="RegionFilter_Changed" Unchecked="RegionFilter_Changed" ToolTip="Includes shared releases such as (USA, Europe); excludes World unless USA is explicitly listed"/>
+          </StackPanel>
+          <TextBlock DockPanel.Dock="Bottom" Text="ARROW KEYS: SELECT   ENTER: LAUNCH" FontSize="11" Foreground="#7772B8" Margin="0,10,0,0"/>
+          <TextBlock x:Name="FilterCountText" DockPanel.Dock="Bottom" FontSize="11" Foreground="#AFA8FF" Margin="0,8,0,0"/>
+          <ListBox x:Name="GameList" Background="Transparent" BorderThickness="0" Foreground="White" SelectionChanged="GameList_SelectionChanged" KeyDown="GameList_KeyDown" MouseDoubleClick="GameList_MouseDoubleClick" DisplayMemberPath="DisplayTitle"/>
+        </DockPanel>
+      </Border>
+      <Border Grid.Column="1" Background="#121039" BorderBrush="#39328C" BorderThickness="1" Padding="28">
+        <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel x:Name="DetailsPanel">
+          <TextBlock Text="SELECT A GAME" FontSize="30" FontWeight="Bold" Foreground="#AFA8FF"/>
+          <TextBlock Text="The remembered titles are catalogued here. Import your own authorized files to make them playable." TextWrapping="Wrap" Margin="0,16,0,0" FontSize="15"/>
+        </StackPanel></ScrollViewer>
+      </Border>
+    </Grid>
+    <StatusBar Grid.Row="2" Background="#121039" Foreground="#8F8ADF" Margin="0,14,0,0"><StatusBarItem><TextBlock x:Name="StatusText" Text="Ready. No game files have been imported."/></StatusBarItem></StatusBar>
+  </Grid>
+</Window>
